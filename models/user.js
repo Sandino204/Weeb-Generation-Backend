@@ -13,6 +13,10 @@ var User = new Schema({
     },
     resetPasswordExpires:{
         type: Date, 
+    },
+    isDeleted:{
+            type: Boolean, 
+            default: false
     }, 
     admin: {
         type: Boolean, 

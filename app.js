@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var passport = require('passport')
 
+const cors = require('cors')
+
 var session = require('express-session')
 var fileStore = require('session-file-store')(session)
 
@@ -21,13 +23,23 @@ const flash = require('express-flash');
 
 const url = config.mongoUrl
 
-const connect = mongoose.connect(url)
+const connect = mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
 connect.then((db) => {
   console.log('Connected correctly to server')
 }, (err) => {console.log(err)})
 
 var app = express();
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,PATCH");
+  res.header('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  app.use(cors())
+  next()
+})
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -39,7 +51,7 @@ app.use(express.urlencoded({ extended: false }));
   
 app.use(session({
   name: 'session-id', 
-  secret: '12345-67890-09876-54321', 
+  secret: config.secretKey, 
   saveUninitialized: false, 
   resave: false, 
   store: new fileStore()
@@ -68,6 +80,8 @@ function auth(req, res, next){
   }
 
 }
+
+
 app.use(auth)
 
 app.use(express.static(path.join(__dirname, 'public')));

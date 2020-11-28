@@ -108,7 +108,7 @@ router.post('/forgot', function(req, res, next){
    function(err){
     res.statusCode = 500
     res.setHeader('Content-Type', 'application/json')
-    res.json({err: error})
+    res.json({err: 2})
    })
 })
 
@@ -121,7 +121,7 @@ router.put('/reset/:token', function(req, res){
       if(!user){
         res.statusCode = 500
         res.setHeader('Content-Type', 'application/json')
-        res.json({err: error})
+        res.json({err: 1})
       }
 
       user.password = req.body.password;
