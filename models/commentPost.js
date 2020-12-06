@@ -20,10 +20,6 @@ const CommentPostSchema = new Schema({
     createdAt: {
         type: Date, 
         default: Date.now
-    }, 
-    postLink: {
-        type: String, 
-        required: true
     },
     like: {
         type: Number, 

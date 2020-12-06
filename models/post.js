@@ -17,11 +17,8 @@ const Post = new Schema({
     },
     topic:{
         type: String, 
-        default: 'Others'
-    }, 
-    link: {
-        type: String
-    }, 
+        default: 'Outros'
+    },  
     text: {
         type: String
     }, 
@@ -72,4 +69,6 @@ Post.pre('findOne', populateAuthor)
 Post.pre('find', populateComments)
 Post.pre('findOne', populateComments)
 
-module.exports = mongoose.model('Post', Post)
+const PostM = mongoose.model('Post', Post)
+
+module.exports = PostM

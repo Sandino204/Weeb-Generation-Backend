@@ -16,11 +16,12 @@ var config = require('./config')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const postRouter = require('./routes/posts')
+const commentPostRouter = require('./routes/commentPosts')
 
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
-
 const url = config.mongoUrl
 
 const connect = mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -40,6 +41,7 @@ app.use((req, res, next) => {
   next()
 })
 
+app.use(bodyParser.json())
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -64,25 +66,8 @@ app.use(flash())
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
-function auth(req, res, next){
-
-  if(!req.user){
-
-    var err = new Error('You Are not autenticated!')
-    err.status = 403
-    return next(err)
-
-  }else{
-
-    next()
-
-  }
-
-}
-
-
-app.use(auth)
+app.use('/post', postRouter)
+app.use('/comment', commentPostRouter)
 
 app.use(express.static(path.join(__dirname, 'public')));
 
