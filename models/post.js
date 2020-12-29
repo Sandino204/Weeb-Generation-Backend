@@ -34,6 +34,10 @@ const Post = new Schema({
         type: Number, 
         default: 0
     }, 
+    isFixed: {
+        type: Boolean, 
+        default: false
+    },
     _author: {
         type: Schema.ObjectId, 
         ref: 'User', 
@@ -50,14 +54,14 @@ const Post = new Schema({
 const populateAuthor = function(next){
     this.populate({
         path: '_author', 
-        select: 'username'
+        select: 'username img'
     })
     next()
 }
 
 const populateComments = function(next){
     this.populate({
-        path: '_comments', 
+        path: '_comments',
         select: '_author createdAt isDeleted text _post shortId like'
     })
 

@@ -37,20 +37,20 @@ commentPostController.getComment = (req, res) => {
 }
 
 //Retrieve all comments of a specific Post
-commentPostController.getAllPostComments = (req, res) => {
-    CommentPostModel.find({_post: req.params.postId, isDeleted: false})
-    .then((result) => {
-        return res.status(200).json({
-            success: true, 
-            data: result
-        })
-    })
-    .catch((err) => {
-        return res.status(500).json({
-            message: err
-        })
-    })
-}
+// commentPostController.getAllPostComments = (req, res) => {
+//     CommentPostModel.find({_post: req.params.postId, isDeleted: false})
+//     .then((result) => {
+//         return res.status(200).json({
+//             success: true, 
+//             data: result
+//         })
+//     })
+//     .catch((err) => {
+//         return res.status(500).json({
+//             message: err
+//         })
+//     })
+// }
 
 //Post methods
 // Create a Post comment
@@ -64,7 +64,7 @@ commentPostController.submitNewComment = (req, res) => {
         shortId = ids.generate()
     }
 
-    PostModel.findOne({ shortId: postId})
+    PostModel.findOne({shortId: postId})
     .then((post) => {
         const newComment = new CommentPostModel({
             shortId, 

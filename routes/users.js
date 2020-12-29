@@ -2,12 +2,15 @@ var express = require('express');
 const bodyParser = require('body-parser')
 var User = require('../models/user')
 var passport = require('passport')
-var authenticate = require('../authenticate')
 var session = require('express-session')
 var async = require('async')
+var fs = require('fs')
+var path = require('path')
+var multer = require('multer')
 
 var crypto = require('crypto')
-const sgMail = require('@sendgrid/mail')
+const sgMail = require('@sendgrid/mail');
+const { findById, update } = require('../models/user');
 sgMail.setApiKey('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')
 
 var router = express.Router();
@@ -36,10 +39,63 @@ router.post('/signup', function(req, res, next){
   })
 })
 
-router.post('/login', passport.authenticate('local'),(req, res) => {
+router.post('/login', passport.authenticate('local') , (req, res) => {
   res.statusCode = 200
   res.setHeader('Content-Type', 'application/json')
   res.json({success: true, status: 'You are successfully logged in'})
+})
+
+router.get('/isLogged', (req, res) => {
+  
+  if(!req.user){
+
+    var err = new Error('You Are not autenticated!')
+    err.status = 403
+    return res.json({
+      logged: false, 
+    })
+
+  }else{
+    User.findById(req.user)
+    .then((user) => {
+      return res.status(200).json({
+        logged: true,
+        user: user 
+      })  
+    })
+  }
+
+})
+
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads')
+  }, 
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+
+var upload = multer({storage: storage})
+
+
+router.put('/changeImage', upload.single('image'), (req, res, next) => {
+  var obj = {
+    data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+    contentType: 'image/png' 
+  }
+
+  User.findByIdAndUpdate(req.user, {img: obj}, {new: true}, function(err, docs){
+    if(err){
+      return res.status(500).json({
+        success: false
+      })
+    }else{
+      return res.status(200).json({
+        success: true
+      })
+    }
+  })
 })
 
 router.get('/logout', (req, res, next) => {

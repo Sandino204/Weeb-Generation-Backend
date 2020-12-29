@@ -17,7 +17,15 @@ var User = new Schema({
     isDeleted:{
             type: Boolean, 
             default: false
+    },
+    img: {
+        data: Buffer, 
+        contentType: String
     }, 
+    typeOfMember:{
+        type: String, 
+        default: 'Membro'
+    },
     admin: {
         type: Boolean, 
         required: true, 

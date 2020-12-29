@@ -16,16 +16,18 @@ postController.getPost = (req, res) =>{
         shortId: postShortId, 
         isDeleted: false
     })
-    .then((result) => {
-        return res.status(200).json({
-            success: true, 
-            data: result
-        })
-    })
-    .catch((err) => {
+    .exec(function(err, result){
+        if(!err){
+            return res.status(200).json({
+                success: true, 
+                data: result
+            })
+        }
+
         return res.status(500).json({
             message: err
         })
+
     })
 
 }
@@ -35,32 +37,38 @@ postController.getAllUserPosts = (req, res) => {
     const sortType = req.body.sortType 
     const user = req.body.user
 
-    if(!sortType){
-        PostModel.find({_author: user, isDeleted: false}).sort({createAt: -1})
-        .then((result) => {
+    if(sortType == 'Data'){
+        PostModel.find({_author: user, isDeleted: false})
+        .sort({createAt: -1})
+        .exec(function(err, result){
+            if(!err){
+                return res.status(200).json({
+                    success: true, 
+                    data: result
+                })
+            }
+
+            return res.status(500).json({
+                message: err
+            })
+
+        })
+    }
+
+    PostModel.find({_author: user, isDeleted: false})
+    .sort({like: -1})
+    .exec(function(err, result){
+        if(!err){
             return res.status(200).json({
                 success: true, 
                 data: result
             })
-        })
-        .catch((err) => {
-            return res.status(500).json({
-                message: err
-            })
-        })
-    }
+        }
 
-    PostModel.find({_author: user, isDeleted: false}).sort({like: -1})
-    .then((result) => {
-        return res.status(200).json({
-            success: true, 
-            data: result
-        })
-    })
-    .catch((err) => {
         return res.status(500).json({
             message: err
         })
+
     })
 
 
@@ -72,32 +80,38 @@ postController.getAllPostsByTopic = (req, res) => {
     const sortType = req.body.sortType 
     const topic = req.body.topic
 
-    if(!sortType){
-        PostModel.find({topic: topic, isDeleted: false}).sort({createAt: -1})
-        .then((result) => {
+    if(sortType == 'Data'){
+        PostModel.find({topic: topic, isDeleted: false})
+        .sort({createAt: -1})
+        .exec(function(err, result){
+            if(!err){
+                return res.status(200).json({
+                    success: true, 
+                    data: result
+                })
+            }
+
+            return res.status(500).json({
+                message: err
+            })
+
+        })
+    }
+
+    PostModel.find({topic: topic, isDeleted: false})
+    .sort({like: -1})
+    .exec(function(err, result){
+        if(!err){
             return res.status(200).json({
                 success: true, 
                 data: result
             })
-        })
-        .catch((err) => {
-            return res.status(500).json({
-                message: err
-            })
-        })
-    }
+        }
 
-    PostModel.find({topic: topic, isDeleted: false}).sort({like: -1})
-    .then((result) => {
-        return res.status(200).json({
-            success: true, 
-            data: result
-        })
-    })
-    .catch((err) => {
         return res.status(500).json({
             message: err
         })
+
     })
 
 }
@@ -108,33 +122,38 @@ postController.getAllPostsByTitle = (req, res) => {
     const sortType = req.body.sortType 
     const title = req.body.title
 
-    if(!sortType){
-        PostModel.find({title: {$regex: req.body.title, $options: "i"}}).sort({createAt: -1})
-        .then((result) => {
-            return res.status(200).json({
-                success: true, 
-                data: result
-            })
-        })
-        .catch((err) => {
+    if(sortType == 'Data'){
+        PostModel.find({title: {$regex: req.body.title, $options: "i"}})
+        .sort({createAt: -1})
+        .exec(function(err, result){
+            if(!err){
+                return res.status(200).json({
+                    success: true, 
+                    data: result
+                })
+            }
+
             return res.status(500).json({
                 message: err
             })
+
         })
     }
     
     PostModel.find({title: {$regex: req.body.title, $options: "i"}})
     .sort({like: -1})
-    .then((result) => {
-        return res.status(200).json({
-            success: true, 
-            data: result
-        })
-    })
-    .catch((err) => {
+    .exec(function(err, result){
+        if(!err){
+            return res.status(200).json({
+                success: true, 
+                data: result
+            })
+        }
+
         return res.status(500).json({
             message: err
         })
+
     })
 
 }
@@ -145,35 +164,38 @@ postController.getAll = (req, res) => {
 
     const sortType = req.body.sortType 
 
-    if(!sortType){
+    if(sortType == 'Data'){
         PostModel.find({isDeleted: false})
         .sort({createAt: -1})
-        .then((result) => {
-            return res.status(200).json({
-                success: true, 
-                data: result
-            })
-        })
-        .catch((err) => {
+        .exec(function(err, result){
+            if(!err){
+                return res.status(200).json({
+                    success: true, 
+                    data: result
+                })
+            }
+
             return res.status(500).json({
                 message: err
             })
+
         })
     }
 
     PostModel.find({isDeleted: false})
     .sort({like: -1})
-    .then((result) => {
-        console.log(result)
-        return res.status(200).json({
-            success: true, 
-            data: result
-        })
-    })
-    .catch((err) => {
+    .exec(function(err, result){
+        if(!err){
+            return res.status(200).json({
+                success: true, 
+                data: result
+            })
+        }
+
         return res.status(500).json({
             message: err
         })
+
     })
     
 

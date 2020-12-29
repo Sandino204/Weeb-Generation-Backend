@@ -20,7 +20,6 @@ function auth(req, res, next){
 }
 
 router.get('/:shortId', CommentPostController.getComment)
-router.get('/:postId/all', commentPostController.getAllPostComments)
 router.post('/submit', auth, commentPostController.submitNewComment)
 router.post('/delete', auth, commentPostController.deleteComment)
 
