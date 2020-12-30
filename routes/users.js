@@ -7,11 +7,12 @@ var async = require('async')
 var fs = require('fs')
 var path = require('path')
 var multer = require('multer')
+const sandGridKey = require('../config').SandGredKey
 
 var crypto = require('crypto')
 const sgMail = require('@sendgrid/mail');
 const { findById, update } = require('../models/user');
-sgMail.setApiKey('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')
+sgMail.setApiKey(sandGridKey)
 
 var router = express.Router();
 
